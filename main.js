@@ -32,11 +32,10 @@ const app = Vue.createApp({
             currentVariant: null,
             sizes: ["XS", "S", "M", "L", "XL", "XXL", "XXXL"],
             cart: Vue.reactive([])
-            ,
-            test: {
+            /*,test: {
                 22: "twenty two",
                 333: "300 thirty three"
-            }
+            }*/
         }
     },
 
