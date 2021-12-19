@@ -12,30 +12,11 @@ class Variant {
 }
 
 const app = Vue.createApp({
-    //el: '#app',
+    // ----- DATA -----
     data() {
         return {
-            product: p,
-            brand: b,
-            altText: 'A pair of Socks',
-            details: ["80% cotton", "20% polyester", "unisex"],
-            variants: [
-                new Variant(2234, "green",
-                    'https://www.vuemastery.com/images/challenges/vmSocks-green-onWhite.jpg',
-                    8, true
-                ),
-                new Variant(2235, "blue",
-                    'https://www.vuemastery.com/images/challenges/vmSocks-blue-onWhite.jpg',
-                    5, false
-                )
-            ],
-            currentVariant: null,
-            sizes: ["XS", "S", "M", "L", "XL", "XXL", "XXXL"],
+            premium: true,
             cart: Vue.reactive([])
-            /*,test: {
-                22: "twenty two",
-                333: "300 thirty three"
-            }*/
         }
     },
 
@@ -66,23 +47,11 @@ const app = Vue.createApp({
     },
 
     created: function () {
-        this.currentVariant = this.variants[0]
+        // noop
     },
 
     // ----- COMPUTED -----
     computed: {
-        productTitle() {
-            return this.brand + ' ' + this.product
-        },
-        inventory() {
-            return this.currentVariant.quantity
-        },
-        image() {
-            return this.currentVariant.image
-        },
-        onSale() {
-            return this.currentVariant.onsale ? " ON SALE!" : ""
-        },
         cartSize() {
             return this.cart.length
         }

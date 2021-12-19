@@ -11,63 +11,17 @@
         <div class="nav-bar"></div>
 
         <div id="app">
-            <div class="product">
-
-                <div class="product-image">
-                    <img :src="image" :alt="altText"/>
-                </div>
-                <div class="product-info">
-                    <h1>{{ productTitle }}</h1>
-
-                    <p v-if="inventory > 10">In Stock: {{ inventory }} left{{ onSale }}</p>
-                    <p v-else-if="inventory > 0 && inventory <= 10">Almost Sold Out! {{ inventory }} left{{ onSale }}</p>
-                    <p v-else :class="{ outOfStock: inventory < 1 }">Out of Stock</p>
-
-                    <div>
-                        DETAILS:
-                        <ul>
-                            <li v-for="detail in details">{{ detail }}</li>
-                        </ul>
-                    </div>
-
-                    <div>
-                        SIZES:
-                        <ul>
-                            <li v-for="size in sizes">{{ size }}</li>
-                        </ul>
-                    </div>
-
-                    <div v-for="variant in variants" 
-                        :key="variant.id"
-                        class="color-circle"
-                        :style="{ backgroundColor: variant.color }"
-                        @mouseover="updateProduct(variant.id)">
-                    </div>
-
-                    <button v-on:click="addToCart"
-                        :disabled="inventory < 1"
-                        :class="{ disabledButton: inventory < 1 }">
-                        Add to Cart
-                    </button>
-                    <button v-on:click="removeFromCart"
-                        :disabled="cartSize < 1"
-                        :class="{ disabledButton: cartSize < 1 }">
-                        Remove from Cart
-                    </button>
-                    <div class="cart">
-                        <p>Cart({{ cartSize }})</p>
-                    </div>
-
-                    <!--div v-for="(val, key) in test"
-                        :id="key">
-                        key:{{ key }} val:{{ val }}
-                    </div-->
-                </div>
-            </div>
+            <div class="cart">Cart({{ cartSize }})</div>
+            <product-display :premium="premium" :cart="cart"></product-display>
+            <product-display :premium="premium" :cart="cart" :default-variant="1"></product-display>
         </div>
 
         <!-- Import App -->
         <script src="main.js"></script>
+
+        <!-- Import Components -->
+        <script src="components/ProductDisplay.js"></script>
+        <script src="components/ProductDetails.js"></script>
 
         <!-- Mount App -->
         <script>
