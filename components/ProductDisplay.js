@@ -1,3 +1,16 @@
+const p = 'Socks'
+const b = 'Vue Mastery'
+
+class Variant {
+    constructor(id, color, image, quantity, onsale) {
+        this.id = id // TODO: maybe fix data duplication
+        this.color = color
+        this.image = image
+        this.quantity = quantity
+        this.onsale = onsale
+    }
+}
+
 app.component('product-display', {
     props: {
         cart: {
@@ -34,25 +47,28 @@ app.component('product-display', {
 
             <product-details :details="details" :sizes="sizes"></product-details>
 
-            <div v-for="variant in variants" 
+            <div v-for="(variant, id) in variants" 
                 :key="variant.id"
                 class="color-circle"
                 :style="{ backgroundColor: variant.color }"
-                @mouseover="updateProduct(variant.id)">
+                @mouseover="updateProduct(id)">
             </div>
 
-            <button v-on:click="addToCart"
+            <button v-on:click="addProductToCart"
                 :disabled="inventory < 1"
                 :class="{ disabledButton: inventory < 1 }">
                 Add to Cart
             </button>
-            <button v-on:click="removeFromCart"
+            <button v-on:click="removeProductFromCart"
                 :disabled="cartSize < 1"
                 :class="{ disabledButton: cartSize < 1 }">
                 Remove from Cart
             </button>
         </div>
     </div>`,
+    // TODO: make different condition for disabling remove button
+    //       because the current one won't work properly with
+    //       multiple product-display components
 
     // ----- DATA -----
     data() {
@@ -61,42 +77,61 @@ app.component('product-display', {
             brand: b,
             altText: 'A pair of Socks',
             details: ["80% cotton", "20% polyester", "unisex"],
-            variants: [
-                new Variant(2234, "green",
+            variants: {
+                2234: new Variant(2234, "green",
                     'https://www.vuemastery.com/images/challenges/vmSocks-green-onWhite.jpg',
                     2, true
                 ),
-                new Variant(2235, "blue",
+                2235: new Variant(2235, "blue",
                     'https://www.vuemastery.com/images/challenges/vmSocks-blue-onWhite.jpg',
                     5, false
                 )
-            ],
+            },
             currentVariant: null,
             sizes: ["XS", "S", "M", "L", "XL", "XXL", "XXXL"]
         }
     },
 
-    // ----- METHODS -----
-    methods: {
-        addToCart: function () {
-        },
-        removeFromCart: function () {
-        },
-        updateProduct: function (variantId) {
-            this.currentVariant = this.variants.find(
-                obj => obj.id === variantId
-            )
-            //console.log("variant updated " + this.vidx)
+    // ----- CREATED -----
+    created: function () {
+        variant = this.variants[this.defaultVariant]
+        if (variant) {
+            this.currentVariant = variant
+        }
+        else {
+            this.currentVariant = Object.values(this.variants)[0]
         }
     },
-
-    created: function () {
-        // console.log("created: this.defaultVariant = " + this.defaultVariant)
-        index = (this.defaultVariant >= 0) ? Math.floor(this.defaultVariant) : 0
-        // console.log("index = " + index)
-        this.currentVariant = this.variants[(index <= this.variants.length) ? index : 0]
-    },
+    // ----- MOUNTED -----
     mounted: function () {
+    },
+
+    // ----- METHODS -----
+    methods: {
+        addProductToCart: function () {
+            // console.log("quantity = " + this.currentVariant.quantity)
+            if (this.currentVariant.quantity > 0) {
+                this.$emit("add-to-cart", this.currentVariant.id)
+                --this.currentVariant.quantity
+                console.log("cart: ", this.cart)
+            }
+        },
+        removeProductFromCart: function () {
+            console.log("cart: ", this.cart)
+            console.log("cart last: ", this.cart.at(-1))
+            itemId = this.cart.at(-1)
+            if (itemId) {
+                el = this.variants[itemId]
+                if (el) {
+                    ++el.quantity
+                    this.$emit("remove-from-cart")
+                }
+            }
+        },
+        updateProduct: function (variantId) {
+            this.currentVariant = this.variants[variantId]
+            //console.log("variant updated " + this.vidx)
+        }
     },
 
     // ----- COMPUTED -----
@@ -117,7 +152,7 @@ app.component('product-display', {
             return this.premium ? "FREE" : "2.99"
         },
         cartSize() {
-            return 0;
+            return this.cart.length;
         }
     }
 })

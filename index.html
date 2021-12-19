@@ -12,8 +12,13 @@
 
         <div id="app">
             <div class="cart">Cart({{ cartSize }})</div>
-            <product-display :premium="premium" :cart="cart"></product-display>
-            <product-display :premium="premium" :cart="cart" :default-variant="1"></product-display>
+            <product-display
+                :premium="premium"
+                :cart="cart"
+                :default-variant="2235"
+                @add-to-cart="addToCart"
+                @remove-from-cart="removeFromCart">
+            </product-display>
         </div>
 
         <!-- Import App -->

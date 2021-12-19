@@ -8,6 +8,16 @@
     <body>
         <div id="app">
             <test-comp :somenum="3+15" somestr="world"></test-comp>
+
+            <p></p>
+            <div v-for="(value, name, index) in dict">
+                name: {{ name }} / value: {{ value }} / index: {{ index }}
+            </div>
+
+            <p></p>
+            <div v-for="(product, id) in products">
+                id: {{ id }} / color: {{ product.color }} / quantity: {{ product.quantity }}
+            </div>
         </div>
         <!-- Import App -->
         <script src="test.js"></script>
