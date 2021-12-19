@@ -113,12 +113,12 @@ app.component('product-display', {
             if (this.currentVariant.quantity > 0) {
                 this.$emit("add-to-cart", this.currentVariant.id)
                 --this.currentVariant.quantity
-                console.log("cart: ", this.cart)
+                //console.log("cart: ", this.cart)
             }
         },
         removeProductFromCart: function () {
-            console.log("cart: ", this.cart)
-            console.log("cart last: ", this.cart.at(-1))
+            // console.log("cart: ", this.cart)
+            // console.log("cart last: ", this.cart.at(-1))
             itemId = this.cart.at(-1)
             if (itemId) {
                 el = this.variants[itemId]
